@@ -99,3 +99,10 @@ class OrderTree(object):
             return self.get_price_list(self.min_price())
         else:
             return None
+
+    def get_price(self, price):
+        if self.depth > 0:
+            return self.get_price_list(price)
+        else:
+            return None
+

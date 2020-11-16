@@ -23,13 +23,15 @@ class OrderBook(object):
     def process_order(self, quote, from_data, verbose):
         order_type = quote['type']
         order_in_book = None
+        trades = None
         if from_data:
             self.time = quote['timestamp']
         else:
             self.update_time()
             quote['timestamp'] = self.time
+        quote['quantity'] = Decimal(quote['quantity'])
         if quote['quantity'] <= 0:
-            sys.exit('process_order() given order of quantity <= 0')
+            return trades, order_in_book
         if not from_data:
             self.next_order_id += 1
         if order_type == 'market':
@@ -38,7 +40,7 @@ class OrderBook(object):
             quote['price'] = Decimal(quote['price'])
             trades, order_in_book = self.process_limit_order(quote, from_data, verbose)
         else:
-            sys.exit("order_type for process_order() is neither 'market' or 'limit'")
+             pass
         return trades, order_in_book
 
     def process_order_list(self, side, order_list, quantity_still_to_trade, quote, verbose):
